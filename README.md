@@ -1,24 +1,57 @@
-# README
+# テーブル設計
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## users テーブル
 
-Things you may want to cover:
+|Column          |Type      |Options           |
+|----------------|----------|------------------|
+|niickname       |string    |null: false       |
+|mail            |string    |null: false       |
+|password        |string    |null: false       |
+|last_name       |string    |null: false       |
+|first_name      |string    |null: false       |
+|last_name_kana  |string    |null: false       |
+|first_name_kana |string    |null: false       |
 
-* Ruby version
+### Association
+- has_many :items
+- has_many :purchas_records
 
-* System dependencies
+## items テーブル
 
-* Configuration
+|Column           |Type       |Options           |
+|-----------------|-----------|------------------|
+|image            |text       |null: false       |
+|name             |string     |null: false       |
+|item_description |text       |null: false       |
+|price            |integer    |null: false       |
+|user             |references |null: false       |
 
-* Database creation
+### Association
+- belongs_to :user
+- has_one :purchas_record
 
-* Database initialization
+## purchas_record テーブル
 
-* How to run the test suite
+|Column    |Type          |Options           |
+|----------|--------------|------------------|
+|user      |references    |null: false       |
+|item      |references    |null: false       |
 
-* Services (job queues, cache servers, search engines, etc.)
+### Association
+- belongs_to :items
+- belongs_to :user
+- has_many :shipping_addresses
 
-* Deployment instructions
+## shipping_address テーブル
 
-* ...
+|Column           |Type         |Options           |
+|-----------------|-------------|------------------|
+|postal_code      |integer      |null: false       |
+|city             |string       |null: false       |
+|street           |string       |null: false       |
+|building         |string       |                  |
+|phone            |integer      |null: false       |
+|shipping_address |references   |null: false       |
+
+### Association
+belongs_to :purchas_record
