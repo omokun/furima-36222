@@ -55,7 +55,7 @@ RSpec.describe User, type: :model do
         expect(@user.errors.full_messages).to include('Password Please include both single-byte alphanumeric characters.')
       end
       it 'passwordがpassword_confirmationと一致していないと登録できない' do
-        @user.password_confirmation = "hoge"
+        @user.password_confirmation = 'hoge'
         @user.password = @user.password_confirmation
         @user.valid?
         expect(@user.errors.full_messages).to include('Password Please include both single-byte alphanumeric characters.')
