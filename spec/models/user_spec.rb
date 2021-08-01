@@ -39,6 +39,11 @@ RSpec.describe User, type: :model do
         another_user.valid?
         expect(another_user.errors.full_messages).to include('Email has already been taken')
       end
+      it 'emailに@が含まれていないと登録できないこと' do
+        @user.email = '111111'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Email is invalid')
+      end
       it 'passwordが5文字以下では登録できない' do
         @user.password = 'xyz00'
         @user.valid?
@@ -46,6 +51,22 @@ RSpec.describe User, type: :model do
       end
       it 'passwordが半角英数字の両方を含めなければ登録できない' do
         @user.password = '000000'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password Please include both single-byte alphanumeric characters.')
+      end
+      it 'passwordがpassword_confirmationと一致していないと登録できない' do
+        @user.password_confirmation = "hoge"
+        @user.password = @user.password_confirmation
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password Please include both single-byte alphanumeric characters.')
+      end
+      it '英字のみでは登録できない' do
+        @user.password = 'aaaaaa'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password Please include both single-byte alphanumeric characters.')
+      end
+      it '全角だと登録できない' do
+        @user.password = 'ｘｙｚ３２１'
         @user.valid?
         expect(@user.errors.full_messages).to include('Password Please include both single-byte alphanumeric characters.')
       end
@@ -79,6 +100,11 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include('Last name kana Please use double-byte characters (katakana)')
       end
+      it 'last_name_kanaが全角ひらがなでは登録ができない' do
+        @user.last_name_kana = 'おおもり'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Last name kana Please use double-byte characters (katakana)')
+      end
       it 'first_name_kanaが空では登録できない' do
         @user.first_name_kana = ''
         @user.valid?
@@ -86,6 +112,11 @@ RSpec.describe User, type: :model do
       end
       it 'first_name_kanaが全角（カタカナ）でなければ登録できない' do
         @user.first_name_kana = 'aaaa'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('First name kana Please use double-byte characters (katakana)')
+      end
+      it 'first_name_kanaが全角ひらながでは登録ができない' do
+        @user.first_name_kana = 'ひろし'
         @user.valid?
         expect(@user.errors.full_messages).to include('First name kana Please use double-byte characters (katakana)')
       end
