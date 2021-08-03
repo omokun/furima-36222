@@ -32,8 +32,18 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Category can't be blank")
       end
+      it 'category_idは、1が選択されていると登録できない' do
+        @item.category_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Category can't be blank")
+      end
       it 'condition_idが空では登録できない' do
         @item.condition_id = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Condition can't be blank")
+      end
+      it 'condition_idは、1が選択されていると登録できない' do
+        @item.condition_id = 1
         @item.valid?
         expect(@item.errors.full_messages).to include("Condition can't be blank")
       end
@@ -42,13 +52,28 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Shipping cost can't be blank")
       end
+      it 'shipping_cost_idは、1が選択されていると登録できない' do
+        @item.shipping_cost_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Shipping cost can't be blank")
+      end
       it 'area_idが空では登録できない' do
         @item.area_id = ''
         @item.valid?
         expect(@item.errors.full_messages).to include("Area can't be blank")
       end
+      it 'area_idは、1が選択されていると登録できない' do
+        @item.area_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Area can't be blank")
+      end
       it 'shipping_time_idが空では登録できない' do
         @item.shipping_time_id = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Shipping time can't be blank")
+      end
+      it 'shipping_time_idは、1が選択されていると登録できない' do
+        @item.shipping_time_id = 1
         @item.valid?
         expect(@item.errors.full_messages).to include("Shipping time can't be blank")
       end
@@ -62,15 +87,25 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include('Price is not a number')
       end
-      it 'priceは¥300~のみ保存可能であるこ' do
+      it 'priceは¥300~のみ保存可能である' do
         @item.price = 299
         @item.valid?
         expect(@item.errors.full_messages).to include('Price must be greater than 299')
       end
-      it 'priceは~¥9,999,999のみ保存可能であるこ' do
+      it 'priceは~¥9,999,999のみ保存可能である' do
         @item.price = 10_000_000
         @item.valid?
         expect(@item.errors.full_messages).to include('Price must be less than 10000000')
+      end
+      it 'priceは半角英字のみでは登録できない' do
+        @item.price = 'abc'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price is not a number')
+      end
+      it 'price半角英数混合では登録できない' do
+        @item.price = 'abc321'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price is not a number')
       end
       it 'userが空では登録できない' do
         @item.user = nil
