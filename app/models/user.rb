@@ -26,5 +26,5 @@ class User < ApplicationRecord
   end
 
   has_many :items, dependent: :destroy
-  # has_many :purchase_records, dependent: :destroy
+  has_many :purchase_records, dependent: :destroy
 end
