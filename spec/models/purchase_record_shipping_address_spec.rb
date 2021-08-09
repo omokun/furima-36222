@@ -23,7 +23,7 @@ RSpec.describe PurchaseRecordShippingAddress, type: :model do
       it 'postal_codeが「3桁ハイフン4桁」の半角文字列でなければ登録できない' do
         @purchase_record_shipping_address.postal_code = 'aaa'
         @purchase_record_shipping_address.valid?
-        expect(@purchase_record_shipping_address.errors.full_messages).to include("Postal code is invalid")
+        expect(@purchase_record_shipping_address.errors.full_messages).to include('Postal code is invalid')
       end
       it 'area_idが空では登録できない' do
         @purchase_record_shipping_address.area_id = ''
@@ -53,7 +53,7 @@ RSpec.describe PurchaseRecordShippingAddress, type: :model do
       it 'phoneが10桁以上11桁以内の半角数値でなければ登録できない' do
         @purchase_record_shipping_address.phone = 'aaa'
         @purchase_record_shipping_address.valid?
-        expect(@purchase_record_shipping_address.errors.full_messages).to include("Phone is invalid")
+        expect(@purchase_record_shipping_address.errors.full_messages).to include('Phone is invalid')
       end
       it 'item_idが空では登録できない' do
         @purchase_record_shipping_address.item_id = ''

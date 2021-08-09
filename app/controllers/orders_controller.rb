@@ -16,10 +16,10 @@ class OrdersController < ApplicationController
     else
       render :index
     end
-
   end
 
   private
+
   def item_find
     @item = Item.find(params[:item_id])
   end
@@ -29,16 +29,17 @@ class OrdersController < ApplicationController
   end
 
   def shipping_address_params
-    params.require(:purchase_record_shipping_address).permit(:price, :postal_code, :area_id, :city, :street, :building, :phone, :token).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
-  end
-
-  def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]  # 自身のPAY.JPテスト秘密鍵を記述しましょう
-    Payjp::Charge.create(
-      amount: @item.price,  # 商品の値段
-      card: shipping_address_params[:token],    # カードトークン
-      currency: 'jpy'                 # 通貨の種類（日本円）
+    params.require(:purchase_record_shipping_address).permit(:price, :postal_code, :area_id, :city, :street, :building, :phone, :token).merge(
+      user_id: current_user.id, item_id: params[:item_id], token: params[:token]
     )
   end
 
+  def pay_item
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']  # 自身のPAY.JPテスト秘密鍵を記述しましょう
+    Payjp::Charge.create(
+      amount: @item.price, # 商品の値段
+      card: shipping_address_params[:token], # カードトークン
+      currency: 'jpy'                 # 通貨の種類（日本円）
+    )
+  end
 end
