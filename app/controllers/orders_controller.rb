@@ -10,6 +10,7 @@ class OrdersController < ApplicationController
   def create
     @purchase_record_shipping_address = PurchaseRecordShippingAddress.new(shipping_address_params)
     if @purchase_record_shipping_address.valid?
+      pay_item
       @purchase_record_shipping_address.save
       redirect_to root_path
     else
@@ -28,7 +29,16 @@ class OrdersController < ApplicationController
   end
 
   def shipping_address_params
-    params.require(:purchase_record_shipping_address).permit(:price, :item_id, :user_id, :postal_code, :area_id, :city, :street, :building, :phone,).merge(user_id: current_user.id, item_id: params[:item_id])
+    params.require(:purchase_record_shipping_address).permit(:price, :postal_code, :area_id, :city, :street, :building, :phone, :token).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
+  end
+
+  def pay_item
+    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]  # 自身のPAY.JPテスト秘密鍵を記述しましょう
+    Payjp::Charge.create(
+      amount: @item.price,  # 商品の値段
+      card: shipping_address_params[:token],    # カードトークン
+      currency: 'jpy'                 # 通貨の種類（日本円）
+    )
   end
 
 end

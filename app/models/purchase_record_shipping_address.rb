@@ -1,6 +1,6 @@
 class PurchaseRecordShippingAddress
   include ActiveModel::Model
-  attr_accessor :price, :item_id, :user_id, :postal_code, :area_id, :city, :street, :phone, :purchase_record_id, :building
+  attr_accessor :item_id, :user_id, :postal_code, :area_id, :city, :street, :phone, :purchase_record_id, :building, :token
 
   with_options presence: true do
     validates :item_id
@@ -9,6 +9,7 @@ class PurchaseRecordShippingAddress
     validates :street
     validates :postal_code, format: { with: /\A\d{3}[-]\d{4}\z/ }
     validates :phone, format: { with: /\A\d{10,11}\z/ }
+    validates :token
 
     with_options numericality: { other_than: 1, message: "can't be blank" } do
       validates :area_id
