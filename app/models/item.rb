@@ -23,5 +23,5 @@ class Item < ApplicationRecord
   belongs_to_active_hash :area
   belongs_to_active_hash :shipping_time
   has_one_attached :image
-  # has_one :purchase_record
+  has_one :purchase_record
 end

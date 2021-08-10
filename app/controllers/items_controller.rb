@@ -41,12 +41,12 @@ class ItemsController < ApplicationController
 
   private
 
-  def redirect_to_index
-    redirect_to action: :index unless current_user == @item.user
-  end
-
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def redirect_to_index
+    redirect_to action: :index if current_user == @item.user || @item.purchase_record.present?
   end
 
   def item_params
